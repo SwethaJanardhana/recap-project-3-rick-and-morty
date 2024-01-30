@@ -1,7 +1,7 @@
-export function SearchBar() {
+export function SearchBar(prop) {
   const formElement = document.createElement("form");
   formElement.classList.add("search-bar");
-  formElement.setAttribute("data-js", "search-bar");
+  formElement.addEventListener("submit", prop.onSubmit);
   formElement.innerHTML = `
     <input
       name="query"

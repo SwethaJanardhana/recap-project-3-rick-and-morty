@@ -7,16 +7,22 @@ const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
 );
-searchBarContainer.append(SearchBar());
-const searchBar = document.querySelector('[data-js="search-bar"]');
 const navigation = document.querySelector('[data-js="navigation"]');
-const buttons = NavigationButtons();
-console.log(Pagination());
-navigation.append(buttons.previous, Pagination(), buttons.next);
-const prevButton = document.querySelector('[data-js="button-prev"]');
-const nextButton = document.querySelector('[data-js="button-next"]');
-const pagination = document.querySelector('[data-js="pagination"]');
 
+const searchBar = SearchBar({ onSubmit: handleSearchBar });
+searchBarContainer.append(searchBar);
+
+const prevButton = NavigationButtons({
+  eventType: "prev",
+  onClick: handlePreviousButton,
+});
+const nextButton = NavigationButtons({
+  eventType: "next",
+  onClick: handleNextButton,
+});
+
+const pagination = Pagination();
+navigation.append(prevButton, pagination, nextButton);
 // States
 let maxPage = 1;
 let pageIndex = 1;
@@ -55,30 +61,7 @@ async function fetchCharacters() {
   }
 }
 
-//next funtionality implementation
-
-nextButton.addEventListener("click", handleNextButton);
-
-function handleNextButton() {
-  if (pageIndex < maxPage) {
-    pageIndex++;
-    fetchCharacters();
-  }
-}
-//previous funtionality implementation
-
-prevButton.addEventListener("click", handlePreviousButton);
-
-function handlePreviousButton() {
-  if (pageIndex > 1) {
-    pageIndex--;
-    fetchCharacters();
-  }
-}
-
 //Searchfunctianality
-
-searchBar.addEventListener("submit", handleSearchBar);
 
 function handleSearchBar(event) {
   event.preventDefault();
@@ -87,4 +70,20 @@ function handleSearchBar(event) {
   searchQuery = data.query;
   pageIndex = 1;
   fetchCharacters();
+}
+
+//next funtionality implementation
+function handleNextButton() {
+  if (pageIndex < maxPage) {
+    pageIndex++;
+    fetchCharacters();
+  }
+}
+
+//Previous functionality
+function handlePreviousButton() {
+  if (pageIndex > 1) {
+    pageIndex--;
+    fetchCharacters();
+  }
 }
